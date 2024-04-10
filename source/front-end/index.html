@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watson Airlines</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Bootstrap JS y otros scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#">Watson Airlines</a>
+    </nav>
+
+    <div class="container">
+        <div class="jumbotron">
+            <h1 class="display-4">¡Bienvenido a Watson Airlines!</h1>
+            <p class="lead">Ofrecemos la mejor experiencia de viaje para nuestros pasajeros.</p>
+            <hr class="my-4">
+            <p>¡Puede tener la siguiente información!</p>
+            <a class="btn btn-primary btn-lg" id="botonAcerca" href="#" role="button">Acerca de Watson Airlines</a>
+            <a class="btn btn-primary btn-lg" id="botonAirlines" href="https://application-b2.1fjstk3v5d83.br-sao.codeengine.appdomain.cloud/airlines" role="button">Nuestras aerolíneas</a>
+            <a class="btn btn-primary btn-lg" href="#" role="button">Buscar vuelos</a>
+            <a class="btn btn-primary btn-lg" href="#" role="button">Información sobre mi vuelo</a>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalAcerca" tabindex="-1" aria-labelledby="modalAcercaLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAcercaLabel">Acerca de Watson Airlines</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Watson Airlines es una de las aerolíneas más grandes de Estados Unidos. Con más de 30 años de historia, conectamos a las personas con las oportunidades mientras ampliamos la comprensión de nuestro planeta y las personas que lo habitan. Ofrecemos nuestro valor único y hospitalidad en más de 50 aeropuertos en más de 15 países. Además, somos miembros de la Asociación Internacional de Transporte Aéreo (IATA), una asociación comercial que representa a más de 300 aerolíneas, lo que equivale a aproximadamente el 83% del tráfico aéreo total. Esto nos permite operar de manera segura, eficiente y económica bajo reglas claramente definidas.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Script para manejar el evento de clic en el botón Acerca -->
+    <script>
+        $(document).ready(function () {
+            $('#botonAcerca').click(function () {
+                $('#modalAcerca').modal('show'); // Mostrar el modal
+            });
+        });
+    </script>
+
+
+    <!-- Fetch API -->
+    <script>
+        document.getElementById('botonAirlines').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            // Hacer la solicitud al backend para obtener las aerolíneas
+            fetch('/airlines')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al obtener las aerolíneas');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Manejar los datos obtenidos del backend
+                    console.log('Aerolíneas obtenidas:', data);
+                })
+                .catch(error => {
+                    console.error('Error al obtener las aerolíneas:', error);
+                    // Manejar el error aquí
+                });
+        });
+    </script>
+</body>
+
+</html>
