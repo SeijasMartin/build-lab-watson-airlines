@@ -31,6 +31,10 @@ async function main(){
         console.log(`Servidor Express en funcionamiento en el puerto ${PORT}`);
     });
 
+    app.get('/', (req, res) => {
+        res.send('¡Hola mundo desde IBM Cloud Code Engine!');
+      });
+      
     // Ruta GET para obtener las aerolíneas
     app.get('/airlines', async (req, res) => {
         try {
