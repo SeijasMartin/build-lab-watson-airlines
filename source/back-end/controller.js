@@ -1,4 +1,5 @@
 const { request, response } = require("express");
+const path = require('path');
 const Airport = require('./airports.schema');
 const Airline = require("./airlines.schema");
 const Flight = require('./flights.schema');
@@ -11,8 +12,9 @@ const Flight = require('./flights.schema');
  */
 
 const inicio = async (req = request, res = response) => {
-    res.send('¡Hola mundo!');
-  };
+    // Enviar el archivo index.html ubicado en la carpeta frontend
+    res.sendFile(path.join(__dirname, '../front-end', 'index.html'));
+};
 
 const getAirlines = async (req = request, res = response) => {
     try {
@@ -57,9 +59,29 @@ const getFlights = async (req = request, res = response) => {
     }
 };
 
+const getFlightsByAirline = async (req = request, res = response) => {
+    const airline = req.params.airline;
+    const origin_airport = req.params.origin_airport;
+
+    try {
+        // Consultar los vuelos de la aerolínea especificada desde la base de datos
+        const flights = await Flight.find({ AIRLINE: airline, ORIGIN_AIRPORT: origin_airport }, 'FLIGHT_NUMBER ORIGIN_AIRPORT DESTINATION_AIRPORT CANCELLED DEPARTURE_DATE ARRIVAL_DATE');
+
+        // Devolver la lista de vuelos como respuesta
+        res.json({
+            result: flights
+        });
+    } catch (error) {
+        // Manejar errores
+        console.error('Error al obtener los vuelos de la aerolínea:', error);
+        res.status(500).json({ error: 'Error al obtener los vuelos de la aerolínea' });
+    }
+};
+
 module.exports = {
     getAirlines,
     getAirports,
     getFlights,
+    getFlightsByAirline,
     inicio
 };

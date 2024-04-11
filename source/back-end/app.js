@@ -17,6 +17,9 @@ async function main(){
     // Crear una instancia de la aplicación Express
     const app = express();
 
+    // Configurar Express para servir archivos estáticos
+    app.use(express.static(path.join(__dirname, '../front-end')));
+
     // Iniciar el servidor Express
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
@@ -33,6 +36,9 @@ async function main(){
     
     // Ruta GET para obtener los vuelos
     app.get('/flights', controller.getFlights);
+
+    app.get('/flights/:airline/:origin_airport', controller.getFlightsByAirline);
+
 
 }
 
