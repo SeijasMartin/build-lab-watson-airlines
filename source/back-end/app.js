@@ -17,8 +17,12 @@ async function main(){
     // Crear una instancia de la aplicación Express
     const app = express();
 
-    // Configurar Express para servir archivos estáticos
-    app.use(express.static(path.join(__dirname, '../front-end')));
+
+    /**esto me daba error por el cors
+     * app.use(cors({
+        origin: 'https://frontend-88.1fns2dopbijw.us-east.codeengine.appdomain.cloud'
+      }));
+*/
 
     // Iniciar el servidor Express
     const PORT = process.env.PORT || 3000;

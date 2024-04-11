@@ -1,21 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Watson Airlines</title>
-    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
 </head>
-
 <body>
-    <!-- Bootstrap JS y otros scripts -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <a class="navbar-brand" href="#">Watson Airlines</a>
     </nav>
@@ -27,10 +19,13 @@
             <hr class="my-4">
             <p>¡Puede tener la siguiente información!</p>
             <a class="btn btn-primary btn-lg" id="botonAcerca" href="#" role="button">Acerca de Watson Airlines</a>
-            <a class="btn btn-primary btn-lg" id="botonAirlines" href="https://application-b2.1fjstk3v5d83.br-sao.codeengine.appdomain.cloud/airlines" role="button">Nuestras aerolíneas</a>
+            <a class="btn btn-primary btn-lg" id="botonAirlines" href="#" role="button">Nuestras aerolíneas</a>
             <a class="btn btn-primary btn-lg" href="#" role="button">Buscar vuelos</a>
             <a class="btn btn-primary btn-lg" href="#" role="button">Información sobre mi vuelo</a>
         </div>
+
+        <!-- Tabla para mostrar las aerolíneas -->
+        <div id="tablaAerolineas"></div>
     </div>
 
     <!-- Modal -->
@@ -52,39 +47,43 @@
             </div>
         </div>
     </div>
-    <!-- Script para manejar el evento de clic en el botón Acerca -->
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <script>
         $(document).ready(function () {
             $('#botonAcerca').click(function () {
-                $('#modalAcerca').modal('show'); // Mostrar el modal
+                $('#modalAcerca').modal('show');
+            });
+
+            $('#botonAirlines').click(function () {
+                // Hacer la solicitud al backend para obtener los datos de las aerolíneas
+                fetch('https://backend-88.1fns2dopbijw.us-east.codeengine.appdomain.cloud/airlines')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error al obtener las aerolíneas');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Construir la tabla con los datos de las aerolíneas
+                        let tablaHTML = '<table class="table"><thead><tr><th>Código IATA</th><th>Aerolínea</th></tr></thead><tbody>';
+                        data.forEach(airline => {
+                            tablaHTML += `<tr><td>${airline.IATA_CODE}</td><td>${airline.AIRLINE}</td></tr>`;
+                        });
+                        tablaHTML += '</tbody></table>';
+
+                        // Mostrar la tabla en el contenedor correspondiente
+                        $('#tablaAerolineas').html(tablaHTML);
+                    })
+                    .catch(error => {
+                        console.error('Error al obtener las aerolíneas:', error);
+                        // Manejar el error aquí
+                    });
             });
         });
     </script>
-
-
-    <!-- Fetch API -->
-    <script>
-        document.getElementById('botonAirlines').addEventListener('click', function(event) {
-            event.preventDefault();
-
-            // Hacer la solicitud al backend para obtener las aerolíneas
-            fetch('/airlines')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error al obtener las aerolíneas');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Manejar los datos obtenidos del backend
-                    console.log('Aerolíneas obtenidas:', data);
-                })
-                .catch(error => {
-                    console.error('Error al obtener las aerolíneas:', error);
-                    // Manejar el error aquí
-                });
-        });
-    </script>
 </body>
-
 </html>

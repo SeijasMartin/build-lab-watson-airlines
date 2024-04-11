@@ -11,10 +11,11 @@ const Flight = require('./flights.schema');
  * @returns {JSON} Lista de aerolíneas
  */
 
-const inicio = async (req = request, res = response) => {
-    // Enviar el archivo index.html ubicado en la carpeta frontend
-    res.sendFile(path.join(__dirname, '../front-end', 'index.html'));
+const inicio = async (req, res) => {
+    // Enviar el texto "¡Hola mundo!" como respuesta
+    res.send('¡Hola mundo!');
 };
+
 
 const getAirlines = async (req = request, res = response) => {
     try {
