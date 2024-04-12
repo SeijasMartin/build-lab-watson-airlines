@@ -31,17 +31,6 @@
         }
       }
     },
-    "/watson": {
-      "get": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
     "/airlines": {
       "get": {
         "description": "",

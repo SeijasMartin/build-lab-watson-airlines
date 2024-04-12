@@ -10,5 +10,11 @@ COPY . .
 # Instala las dependencias de la aplicación
 RUN npm install
 
+# Install the node SDK
+RUN npm install ibm-watson
+
+# instala el dotenv para .env
+RUN npm install dotenv
+
 # Ejecuta la aplicación al iniciar el contenedor
 CMD [ "node", "app.js" ]

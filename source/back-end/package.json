@@ -10,10 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "@ibm-cloud/secrets-manager": "^2.0.3",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "ibm-cloud-databases": "^0.1.0",
-    "ibm-watson": "^5.4.0",
+    "ibm-watson": "^8.0.0",
     "mongodb": "^5.0.0",
     "mongoose": "^6.9.0",
     "mongoose.models.autoload": "^0.3.1",

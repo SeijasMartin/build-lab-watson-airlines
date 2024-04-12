@@ -1,8 +1,10 @@
-const { request, response } = require("express");
+const { request, response: expressResponse } = require("express");
 const path = require('path');
 const Airport = require('./airports.schema');
 const Airline = require("./airlines.schema");
 const Flight = require('./flights.schema');
+
+const { sendMessage } = require('./watsonAssistantConfig'); // Importa la función sendMessage de Watson Assistant
 
 /**
  * Controlador para obtener la lista de aerolíneas desde la base de datos
@@ -17,26 +19,26 @@ const inicio = async (req, res) => {
 };
 
 
-const getAirlines = async (req = request, res = response) => {
+const getAirlines = async (req, res = expressResponse) => {
     try {
-        // Consultar las aerolíneas desde la base de datos
-        const airlines = await Airline.find({}, 'AIRLINE');
+        // Cadena de texto estática para enviar a Watson Assistant
+        const text = "Prueba de mensaje estático para Watson Assistant";
 
-        // Extraer solo los nombres de las aerolíneas del resultado
-        const airlineNames = airlines.map(airline => airline.AIRLINE);
+        // Enviar la cadena de texto a Watson Assistant y obtener la respuesta
+        const watsonResponse = await sendMessage(text);
 
-        // Convertir la lista de nombres en un solo string separado por comas
-        const airlineNamesString = airlineNames.join('\n');
+        // Extraer el mensaje de la respuesta de Watson Assistant
+        const watsonMessage = watsonResponse.output.generic[0].text;
 
-        // Devolver el string con los nombres de las aerolíneas como respuesta
-        res.send(airlineNamesString);
-
+        // Devolver el mensaje de Watson Assistant como respuesta
+        res.send(watsonMessage);
     } catch (error) {
         // Manejar errores
         console.error('Error al obtener las aerolíneas:', error);
         res.status(500).json({ error: 'Error al obtener las aerolíneas' });
     }
 };
+
 
 // Ruta GET para obtener los aeropuertos
 const getAirports = async (req = request, res = response) => {
@@ -122,12 +124,6 @@ const getFlightsBy = async (req = request, res = response) => {
         res.status(500).json({ error: 'Error al obtener los vuelos' });
     }
 };
-
-
-
-
-
-
 
 module.exports = {
     getAirlines,
