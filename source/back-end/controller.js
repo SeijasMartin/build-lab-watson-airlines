@@ -13,7 +13,7 @@ const Flight = require('./flights.schema');
 
 const inicio = async (req, res) => {
     // Enviar el texto "¡Hola mundo!" como respuesta
-    res.send('¡Hola mundo!');
+    res.send('Watson Airlines es una de las aerolíneas más grandes de Estados Unidos. Con más de 30 años de historia, conectamos a las personas con las oportunidades mientras ampliamos la comprensión de nuestro planeta y las personas que lo habitan. Ofrecemos nuestro valor único y hospitalidad en más de 50 aeropuertos en más de 15 países. Además, somos miembros de la Asociación Internacional de Transporte Aéreo (IATA), una asociación comercial que representa a más de 300 aerolíneas, lo que equivale a aproximadamente el 83% del tráfico aéreo total. Esto nos permite operar de manera segura, eficiente y económica bajo reglas claramente definidas.');
 };
 
 
@@ -30,6 +30,7 @@ const getAirlines = async (req = request, res = response) => {
 
         // Devolver el string con los nombres de las aerolíneas como respuesta
         res.send(airlineNamesString);
+
     } catch (error) {
         // Manejar errores
         console.error('Error al obtener las aerolíneas:', error);
@@ -37,9 +38,16 @@ const getAirlines = async (req = request, res = response) => {
     }
 };
 
+const getWatson = async (req = request, res = response) => {
+    try {
+        res.send('Watson Airlines es una de las aerolíneas más grandes de Estados Unidos. Con más de 30 años de historia, conectamos a las personas con las oportunidades mientras ampliamos la comprensión de nuestro planeta y las personas que lo habitan. Ofrecemos nuestro valor único y hospitalidad en más de 50 aeropuertos en más de 15 países. Además, somos miembros de la Asociación Internacional de Transporte Aéreo (IATA), una asociación comercial que representa a más de 300 aerolíneas, lo que equivale a aproximadamente el 83% del tráfico aéreo total. Esto nos permite operar de manera segura, eficiente y económica bajo reglas claramente definidas.');
 
-
-
+    } catch (error) {
+        // Manejar errores
+        console.error('Error al obtener la informacion de watson:', error);
+        res.status(500).json({ error: 'Error al obtener la informacion de watson' });
+    }
+};
 
 // Ruta GET para obtener los aeropuertos
 const getAirports = async (req = request, res = response) => {
@@ -137,5 +145,6 @@ module.exports = {
     getAirports,
     getFlightsORDE,
     getFlightsBy,
+    getWatson,
     inicio
 };

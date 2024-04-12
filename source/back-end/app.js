@@ -31,6 +31,8 @@ async function main(){
     });
 
     app.get('/', controller.inicio);
+
+    app.get('/watson', controller.getWatson);
       
     // Ruta GET para obtener las aerolíneas
     app.get('/airlines', controller.getAirlines);
