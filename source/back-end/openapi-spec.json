@@ -1,0 +1,210 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Watson Airlines Customer Experience",
+    "description": "API for managing flights and related data for Watson Airlines.",
+    "contact": {
+      "name": "Martín Seijas",
+      "email": "martinseijas@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local Server"
+    },
+    {
+      "url": "https://backend-88.1fns2dopbijw.us-east.codeengine.appdomain.cloud",
+      "description": "IBM Code Engine Deployment"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/airlines": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/airports": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/flights": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "airline",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "origin_airport",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "destination_airport",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "departure_date",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "arrival_date",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cancelled",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Flight": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "object"
+          },
+          "properties": {
+            "type": "object",
+            "properties": {
+              "AIRLINE": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  }
+                }
+              },
+              "FLIGHT_NUMBER": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "number"
+                  }
+                }
+              },
+              "ORIGIN_AIRPORT": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  }
+                }
+              },
+              "DESTINATION_AIRPORT": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  }
+                }
+              },
+              "CANCELLED": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "boolean"
+                  }
+                }
+              },
+              "DEPARTURE_DATE": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "format": {
+                    "type": "string",
+                    "example": "date-time"
+                  }
+                }
+              },
+              "ARRIVAL_DATE": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "format": {
+                    "type": "string",
+                    "example": "date-time"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": []
+}

@@ -39,10 +39,9 @@ async function main(){
     app.get('/airports', controller.getAirports);
     
     // Ruta GET para obtener los vuelos
-    app.get('/flights', controller.getFlights);
+    //app.get('/flights', controller.getFlights);
 
-    app.get('/flights/:airline/:origin_airport', controller.getFlightsByAirline);
-
+    app.get('/flights', controller.getFlightsBy);
 
 }
 
