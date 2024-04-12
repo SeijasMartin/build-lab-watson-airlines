@@ -13,6 +13,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.19.2",
     "ibm-cloud-databases": "^0.1.0",
+    "ibm-watson": "^5.4.0",
     "mongodb": "^5.0.0",
     "mongoose": "^6.9.0",
     "mongoose.models.autoload": "^0.3.1",
