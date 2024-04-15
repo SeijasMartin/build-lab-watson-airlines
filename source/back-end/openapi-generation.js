@@ -29,6 +29,37 @@ const mongo_specs = {
                 format: "date-time"
             },
         },
+    },
+    Airline: {
+        type: "object",
+        properties: {
+            IATA_CODE: {
+                type: "string",
+            },
+            AIRLINE: {
+                type: "string",
+            },
+        },
+    },
+    Airport: {
+        type: "object",
+        properties: {
+            IATA_CODE: {
+                type: "string",
+            },
+            AIRPORT: {
+                type: "string",
+            },
+            CITY: {
+                type: "string",
+            },
+            STATE: {
+                type: "string",
+            },
+            COUNTRY: {
+                type: "string",
+            }
+        },
     }
 };
 
