@@ -30,9 +30,6 @@ async function main() {
         // Ruta GET para obtener las aerolíneas
         app.get('/airlines', controller.getAirlines);
 
-        // Ruta GET para obtener los aeropuertos con aeropuerto de origen y destino
-        app.get('/airports', controller.getAirports);
-
         // Ruta GET para obtener los vuelos con el aeropuerto de origen y de destino
         app.get('/flightsORDE', controller.getFlightsORDE);        
 
@@ -41,9 +38,6 @@ async function main() {
 
         // Ruta GET para obtener información de un vuelo con su número
         app.get('/flightsByNumber', controller.getFlightByNumber);
-
-        // Ruta GET para obtener un saludo
-        app.get('/mensaje-hola', controller.getHola);
 
     } catch (error) {
         console.error('Error al iniciar la aplicación:', error);

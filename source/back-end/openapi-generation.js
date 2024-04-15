@@ -40,26 +40,6 @@ const mongo_specs = {
                 type: "string",
             },
         },
-    },
-    Airport: {
-        type: "object",
-        properties: {
-            IATA_CODE: {
-                type: "string",
-            },
-            AIRPORT: {
-                type: "string",
-            },
-            CITY: {
-                type: "string",
-            },
-            STATE: {
-                type: "string",
-            },
-            COUNTRY: {
-                type: "string",
-            }
-        },
     }
 };
 

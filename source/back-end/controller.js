@@ -1,6 +1,5 @@
 const { request, response: expressResponse } = require("express");
 const path = require('path');
-const Airport = require('./airports.schema');
 const Airline = require("./airlines.schema");
 const Flight = require('./flights.schema');
 
@@ -25,7 +24,7 @@ const getAirlines = async (req, res = expressResponse) => {
         const airlines = await Airline.find({}, 'AIRLINE');
 
         // Extraer solo los nombres de las aerolíneas
-        const airlineNames = airlines.map(airline => airline.AIRLINE);
+        const airlineNames = airlines.map(airline => airline.AIRLINE).join('\n');
 
         // Devolver solo los nombres de las aerolíneas como respuesta
         res.json({
@@ -53,46 +52,6 @@ const getAirlines = async (req, res = expressResponse) => {
         // Manejar errores
         console.error('Error al obtener las aerolíneas:', error);
         res.status(500).json({ error: 'Error al obtener las aerolíneas' });
-    }
-};
-
-
-
-// Ruta GET para obtener los aeropuertos
-const getAirports = async (req, res = response) => {
-    try {
-        // Consultar los aeropuertos desde la base de datos
-        const airports = await Airport.find({}, 'AIRPORT');
-
-        // Extraer solo los nombres de los aeropuertos
-        const airportNames = airports.map(airport => airport.AIRPORT);
-
-        // Devolver solo los nombres de los aeropuertos como respuesta
-        res.json({
-            /* #swagger.responses[200] = {
-                "description": "OK",
-                "content": {
-                  "application/json": {
-                    "schema": {
-                        "type" : "object",
-                        "properties" : {
-                            "result" : {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                }
-                            }
-                        }
-                    }
-                  }
-                }
-            } */
-            result: airportNames
-        });
-    } catch (error) {
-        // Manejar errores
-        console.error('Error al obtener los aeropuertos:', error);
-        res.status(500).json({ error: 'Error al obtener los aeropuertos' });
     }
 };
 
@@ -268,48 +227,10 @@ const getFlightByNumber = async (req = request, res = response) => {
     }
 };
 
-
-
-
-
-const getHola = async (req, res = response) => {
-    try {
-        // Definir el mensaje que quieres enviar
-        const mensaje = "Hola";
-
-        // Devolver el mensaje como respuesta
-        res.json({
-            /* #swagger.responses[200] = {
-                "description": "OK",
-                "content": {
-                  "application/json": {
-                    "schema": {
-                        "type" : "object",
-                        "properties" : {
-                            "message" : {
-                                "type": "string"
-                            }
-                        }
-                    }
-                  }
-                }
-            } */
-            message: mensaje
-        });
-    } catch (error) {
-        // Manejar errores
-        console.error('Error al obtener el mensaje:', error);
-        res.status(500).json({ error: 'Error al obtener el mensaje' });
-    }
-};
-
-
 module.exports = {
     getAirlines,
-    getAirports,
     getFlightsORDE,
     getFlightsBy,
     getFlightByNumber,
-    getHola,
     inicio
 };
