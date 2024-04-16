@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Vuelos - Watson Airlines</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#">Watson Airlines - Lista de Vuelos</a>
+    </nav>
+
+    <div id="loading" style="display: none;">
+        <button class="btn btn-primary" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            <span role="status">Loading...</span>
+        </button>
+    </div>
+
+    <ul id="vuelos-lista" class="list-group">
+        <!-- Los elementos de la lista se agregarán dinámicamente aquí -->
+    </ul>
+
+    <script src="frontendFunctions.js"></script>
+    <script>
+        async function mostrarVuelos() {
+            try {
+                // Mostrar el elemento de carga
+                document.getElementById('loading').style.display = 'block';
+
+                // Obtener los parámetros de la URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const originAirport = urlParams.get('origin_airport');
+                const destinationAirport = urlParams.get('destination_airport');
+
+                // Obtener los vuelos desde el backend
+                const vuelos = await getFlightsFromBackendORDE(originAirport, destinationAirport);
+
+                // Mostrar los vuelos en la lista
+                const lista = document.getElementById('vuelos-lista');
+                vuelos.forEach(vuelo => {
+                    const li = document.createElement('li');
+                    li.classList.add('list-group-item');
+                    li.textContent = vuelo;
+                    lista.appendChild(li);
+                });
+
+                // Ocultar el elemento de carga después de cargar los datos
+                document.getElementById('loading').style.display = 'none';
+            } catch (error) {
+                console.error('Error al obtener los vuelos:', error);
+            }
+        }
+
+        // Llamar a la función para mostrar los vuelos cuando la página se cargue
+        mostrarVuelos();
+    </script>
+</body>
+</html>
