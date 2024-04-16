@@ -24,8 +24,20 @@ async function main() {
 
         app.use(express.json()); // Middleware para parsear el cuerpo de las solicitudes como JSON
 
+        // Middleware para permitir CORS solo para una URL específica
+        app.use((req, res, next) => {
+            // Verificar si la solicitud proviene de la URL específica
+            if (req.get('origin') === 'https://frontend-88.1fns2dopbijw.us-east.codeengine.appdomain.cloud') {
+                res.header('Access-Control-Allow-Origin', req.get('origin'));
+                res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+            }
+            next();
+        });
         // Ruta GET para la página de inicio
         app.get('/', controller.inicio);
+
+        // Ruta GET para obtener los aeropuertos
+        app.get('/airports', controller.getAirports);
 
         // Ruta GET para obtener las aerolíneas
         app.get('/airlines', controller.getAirlines);
