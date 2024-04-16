@@ -32,21 +32,31 @@
                 document.getElementById('loading').style.display = 'block';
                 
                 const aeropuertosString = await getAirportsFromBackend();
-                const aeropuertos = JSON.parse(aeropuertosString); // Convertir la cadena JSON en un objeto JavaScript
 
-                const lista = document.getElementById('aeropuertos-lista');
-                aeropuertos.result.forEach(aeropuerto => { // Acceder a la propiedad "result" que contiene los nombres de los aeropuertos
-                    const li = document.createElement('li');
-                    li.classList.add('list-group-item');
-                    li.textContent = aeropuerto;
-                    lista.appendChild(li);
-                });
-                // Ocultar el elemento de carga después de cargar los datos
-                document.getElementById('loading').style.display = 'none';
+                if (aeropuertosString !== undefined) {
+                    // Dividir la cadena por líneas para obtener los nombres de los aeropuertos
+                    const aeropuertos = aeropuertosString.split('\n');
+
+                    const lista = document.getElementById('aeropuertos-lista');
+                    aeropuertos.forEach(aeropuerto => { 
+                        // Crear un elemento de lista para cada aeropuerto y agregarlo a la lista
+                        const li = document.createElement('li');
+                        li.classList.add('list-group-item');
+                        li.textContent = aeropuerto.trim(); // Eliminar cualquier espacio en blanco alrededor del nombre del aeropuerto
+                        lista.appendChild(li);
+                    });
+                    // Ocultar el elemento de carga después de cargar los datos
+                    document.getElementById('loading').style.display = 'none';
+                } else {
+                    console.error('Los datos de los aeropuertos no están definidos.');
+                }
             } catch (error) {
                 console.error('Error al obtener los aeropuertos:', error);
             }
         }
+
+
+
 
 
         // Llamar a la función para mostrar los aeropuertos cuando la página se cargue

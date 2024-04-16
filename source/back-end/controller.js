@@ -25,7 +25,7 @@ const getAirports = async (req, res = response) => {
         const airports = await Airport.find({}, 'AIRPORT');
 
         // Extraer solo los nombres de los aeropuertos
-        const airportNames = airports.map(airport => airport.AIRPORT);
+        const airportNames = airports.map(airport => airport.AIRPORT).join('\n');
 
         // Devolver solo los nombres de los aeropuertos como respuesta
         res.json({

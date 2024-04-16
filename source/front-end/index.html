@@ -57,32 +57,6 @@
             $('#botonAcerca').click(function () {
                 $('#modalAcerca').modal('show');
             });
-
-            $('#botonAirlines').click(function () {
-                // Hacer la solicitud al backend para obtener los datos de las aerolíneas
-                fetch('https://backend-88.1fns2dopbijw.us-east.codeengine.appdomain.cloud/airlines')
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Error al obtener las aerolíneas');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Construir la tabla con los datos de las aerolíneas
-                        let tablaHTML = '<table class="table"><thead><tr><th>Código IATA</th><th>Aerolínea</th></tr></thead><tbody>';
-                        data.forEach(airline => {
-                            tablaHTML += `<tr><td>${airline.IATA_CODE}</td><td>${airline.AIRLINE}</td></tr>`;
-                        });
-                        tablaHTML += '</tbody></table>';
-
-                        // Mostrar la tabla en el contenedor correspondiente
-                        $('#tablaAerolineas').html(tablaHTML);
-                    })
-                    .catch(error => {
-                        console.error('Error al obtener las aerolíneas:', error);
-                        // Manejar el error aquí
-                    });
-            });
         });
     </script>
 
