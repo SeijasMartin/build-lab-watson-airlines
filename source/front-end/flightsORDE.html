@@ -19,9 +19,25 @@
         </button>
     </div>
 
-    <ul id="vuelos-lista" class="list-group">
-        <!-- Los elementos de la lista se agregarán dinámicamente aquí -->
-    </ul>
+    <div class="container mt-5">
+        <h2>Lista de Vuelos</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Aerolínea</th>
+                    <th>Número de Vuelo</th>
+                    <th>Aeropuerto de Origen</th>
+                    <th>Aeropuerto de Destino</th>
+                    <th>Cancelado</th>
+                    <th>Fecha de Salida</th>
+                    <th>Fecha de Llegada</th>
+                </tr>
+            </thead>
+            <tbody id="vuelos-lista">
+                <!-- Los elementos de la tabla se agregarán dinámicamente aquí -->
+            </tbody>
+        </table>
+    </div>
 
     <script src="frontendFunctions.js"></script>
     <script>
@@ -38,13 +54,20 @@
                 // Obtener los vuelos desde el backend
                 const vuelos = await getFlightsFromBackendORDE(originAirport, destinationAirport);
 
-                // Mostrar los vuelos en la lista
+                // Mostrar los vuelos en la tabla
                 const lista = document.getElementById('vuelos-lista');
                 vuelos.forEach(vuelo => {
-                    const li = document.createElement('li');
-                    li.classList.add('list-group-item');
-                    li.textContent = vuelo;
-                    lista.appendChild(li);
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${vuelo.AIRLINE}</td>
+                        <td>${vuelo.FLIGHT_NUMBER}</td>
+                        <td>${vuelo.ORIGIN_AIRPORT}</td>
+                        <td>${vuelo.DESTINATION_AIRPORT}</td>
+                        <td>${vuelo.CANCELLED ? 'Sí' : 'No'}</td>
+                        <td>${new Date(vuelo.DEPARTURE_DATE).toLocaleString()}</td>
+                        <td>${new Date(vuelo.ARRIVAL_DATE).toLocaleString()}</td>
+                    `;
+                    lista.appendChild(tr);
                 });
 
                 // Ocultar el elemento de carga después de cargar los datos

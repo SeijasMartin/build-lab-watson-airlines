@@ -104,39 +104,19 @@ const getFlightsORDE = async (req = request, res = response) => {
         const flights = await Flight.find({
             ORIGIN_AIRPORT: originAirport,
             DESTINATION_AIRPORT: destinationAirport
-        }, 'FLIGHT_NUMBER');
+        });
 
-        // Extraer solo los números de vuelo
-        const flightNumbers = flights.map(flight => flight.FLIGHT_NUMBER);
-
-        // Devolver los números de vuelo como respuesta
+        // Devolver los vuelos encontrados como respuesta
         res.json({
-            /* #swagger.responses[200] = {
-                "description": "OK",
-                "content": {
-                  "application/json": {
-                    "schema": {
-                        "type" : "object",
-                        "properties" : {
-                            "result" : {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                }
-                            }
-                        }
-                    }
-                  }
-                }
-            } */
-            result: flightNumbers
+            result: flights
         });
     } catch (error) {
         // Manejar errores
-        console.error('Error al obtener los números de vuelo:', error);
-        res.status(500).json({ error: 'Error al obtener los números de vuelo' });
+        console.error('Error al obtener los vuelos:', error);
+        res.status(500).json({ error: 'Error al obtener los vuelos' });
     }
 };
+
 
 
 //obtener vuelos segun los distintos atributos

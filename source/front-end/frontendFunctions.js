@@ -39,3 +39,4 @@ async function getFlightsFromBackendORDE(originAirport, destinationAirport) {
         throw error;
     }
 }
+
