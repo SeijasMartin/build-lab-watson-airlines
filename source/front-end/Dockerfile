@@ -6,6 +6,7 @@ COPY index.html /usr/share/nginx/html
 COPY airlines.html /usr/share/nginx/html
 COPY airports.html /usr/share/nginx/html
 COPY flightsORDE.html /usr/share/nginx/html
+COPY flightsBy.html /usr/share/nginx/html
 COPY styles.css /usr/share/nginx/html
 COPY frontendFunctions.js /usr/share/nginx/html
 

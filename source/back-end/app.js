@@ -36,6 +36,9 @@ async function main() {
         // Ruta GET para la página de inicio
         app.get('/', controller.inicio);
 
+        // Ruta GET para convertir la fecha a formato string y así watson pueda pasar el link correcto al usuario
+        app.get('/dateToString', controller.getDateToString);
+
         // Ruta GET para obtener los aeropuertos
         app.get('/airports', controller.getAirports);
 

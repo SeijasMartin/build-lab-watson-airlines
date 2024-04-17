@@ -6,17 +6,57 @@ const Flight = require('./flights.schema');
 
 const { sendMessage } = require('./watsonAssistantConfig'); // Importa la función sendMessage de Watson Assistant
 
-/**
- * Controlador para obtener la lista de aerolíneas desde la base de datos
- * @param {JSON} req Objeto de solicitud HTTP
- * @param {JSON} res Objeto de respuesta HTTP
- * @returns {JSON} Lista de aerolíneas
- */
-
 const inicio = async (req, res) => {
     // Prueba
     res.send('Watson Airlines es una de las aerolíneas más grandes de Estados Unidos. Con más de 30 años de historia, conectamos a las personas con las oportunidades mientras ampliamos la comprensión de nuestro planeta y las personas que lo habitan. Ofrecemos nuestro valor único y hospitalidad en más de 50 aeropuertos en más de 15 países. Además, somos miembros de la Asociación Internacional de Transporte Aéreo (IATA), una asociación comercial que representa a más de 300 aerolíneas, lo que equivale a aproximadamente el 83% del tráfico aéreo total. Esto nos permite operar de manera segura, eficiente y económica bajo reglas claramente definidas.');
 };
+
+// Importa las dependencias necesarias
+const express = require('express');
+const app = express();
+
+const getDateToString = async (req, res = response) => {
+    try {
+        // Obtén la fecha de la consulta
+        const dateString = req.query.date;
+
+        // Parsea la fecha
+        const dateObject = new Date(dateString);
+
+        // Obtiene los componentes de la fecha
+        const year = dateObject.getFullYear();
+        const month = ('0' + (dateObject.getMonth() + 1)).slice(-2); // Añade un cero inicial si el mes es de un solo dígito
+        const day = ('0' + dateObject.getDate()).slice(-2); // Añade un cero inicial si el día es de un solo dígito
+
+        // Formatea la fecha como se espera en el enlace del frontend
+        const formattedDate = `${year}-${month}-${day}`;
+
+        // Devuelve la fecha formateada como respuesta
+        res.status(200).json({
+            /* #swagger.responses[200] = {
+                "description": "OK",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                        "type" : "object",
+                        "properties" : {
+                            "formattedDate": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                  }
+                }
+            } */
+            formattedDate: formattedDate
+        });
+    } catch (error) {
+        // Maneja los errores
+        console.error('Error al procesar la fecha:', error);
+        res.status(400).send('Error al procesar la fecha');
+    }
+}
+
 
 // Ruta GET para obtener los aeropuertos
 const getAirports = async (req, res = response) => {
@@ -124,25 +164,14 @@ const getFlightsORDE = async (req = request, res = response) => {
 const getFlightsBy = async (req = request, res = response) => {
     try {
         // Obtener los parámetros de la URL
-        const airline = req.query.airline;
-        const flight_number = req.query.flight_number;
         const origin_airport = req.query.origin_airport;
         const destination_airport = req.query.destination_airport;
         const departure_date_start = req.query.departure_date_start; // Fecha de salida inicial del rango
         const departure_date_end = req.query.departure_date_end; // Fecha de salida final del rango
         const arrival_date = req.query.arrival_date;
-        const cancelled = req.query.cancelled;
 
         // Construir el objeto de filtro para la consulta
         const filter = {};
-
-        if (airline) {
-            filter.AIRLINE = airline;
-        }
-
-        if (flight_number) {
-            filter.FLIGHT_NUMBER = flight_number;
-        }
 
         if (origin_airport) {
             filter.ORIGIN_AIRPORT = origin_airport;
@@ -153,28 +182,29 @@ const getFlightsBy = async (req = request, res = response) => {
         }
 
         if (departure_date_start && departure_date_end) {
-            // Si se proporciona un rango de fechas, agregar condiciones al filtro
-            filter.DEPARTURE_DATE = { $gte: departure_date_start, $lte: departure_date_end };
-        } else if (departure_date) {
-            // Si solo se proporciona una fecha, agregar esa fecha al filtro
-            filter.DEPARTURE_DATE = departure_date;
+            // Si se proporciona un rango de fechas, convertir las cadenas de fecha en objetos Date
+            const startDate = new Date(departure_date_start);
+            const endDate = new Date(departure_date_end);
+            
+            // Sumar 1 día a la fecha de finalización del rango
+            endDate.setDate(endDate.getDate() + 1);
+        
+            // Agregar condiciones al filtro para que la fecha de partida esté dentro del rango
+            filter.DEPARTURE_DATE = { $gte: startDate, $lt: endDate };
+        } else if (departure_date_start) {
+            // Si solo se proporciona una fecha de inicio, agregar esa fecha al filtro
+            filter.DEPARTURE_DATE = new Date(departure_date_start);
         }
+              
 
         if (arrival_date) {
             filter.ARRIVAL_DATE = arrival_date;
         }
 
-        if (cancelled) {
-            filter.CANCELLED = cancelled === 'true'; // Convertir a booleano si es necesario
-        }
-
         // Consultar los vuelos según los filtros proporcionados
         const flights = await Flight.find(filter);
 
-        // Extraer solo los números de vuelo
-        const flightNumbers = flights.map(flight => flight.FLIGHT_NUMBER);
-
-        // Devolver los números de vuelo como respuesta
+        // Devolver los vuelos como respuesta
         res.json({
             /* #swagger.responses[200] = {
                 "description": "OK",
@@ -186,7 +216,7 @@ const getFlightsBy = async (req = request, res = response) => {
                             "result" : {
                                 "type": "array",
                                 "items": {
-                                  "type": "string"
+                                  "$ref": "#/definitions/Flight"
                                 }
                             }
                         }
@@ -194,7 +224,7 @@ const getFlightsBy = async (req = request, res = response) => {
                   }
                 }
             } */
-            result: flightNumbers
+            result: flights
         });
     } catch (error) {
         // Manejar errores
@@ -202,6 +232,8 @@ const getFlightsBy = async (req = request, res = response) => {
         res.status(500).json({ error: 'Error al obtener los vuelos' });
     }
 };
+
+
 
 const getFlightByNumber = async (req = request, res = response) => {
     try {
@@ -246,6 +278,7 @@ const getFlightByNumber = async (req = request, res = response) => {
 };
 
 module.exports = {
+    getDateToString,
     getAirlines,
     getFlightsORDE,
     getFlightsBy,

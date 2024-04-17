@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Vuelos - Watson Airlines</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#">Watson Airlines - Lista de Vuelos</a>
+    </nav>
+
+    <div id="loading" style="display: none;">
+        <button class="btn btn-primary" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            <span role="status">Loading...</span>
+        </button>
+    </div>
+
+    <table id="flights-table" class="table">
+        <thead>
+            <tr>
+                <th>Aerolínea</th>
+                <th>Número de Vuelo</th>
+                <th>Aeropuerto de Origen</th>
+                <th>Aeropuerto de Destino</th>
+                <th>Cancelado</th>
+                <th>Fecha de Salida</th>
+                <th>Fecha de Llegada</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Los datos de los vuelos se agregarán dinámicamente aquí -->
+        </tbody>
+    </table>
+
+    <script src="frontendFunctions.js"></script>
+    <script>
+        async function mostrarVuelos() {
+            try {
+                // Mostrar el elemento de carga
+                document.getElementById('loading').style.display = 'block';
+    
+                // Obtener los parámetros de la URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const originAirport = urlParams.get('origin_airport');
+                const destinationAirport = urlParams.get('destination_airport');
+                const departureDateStart = urlParams.get('departure_date_start');
+                const departureDateEnd = urlParams.get('departure_date_end');
+    
+                // Obtener los vuelos desde el backend
+                const vuelos = await getFlightsFromBackendBy(originAirport, destinationAirport, departureDateStart, departureDateEnd);
+    
+                console.log('Vuelos recuperados del backend:', vuelos);
+    
+                // Mostrar los vuelos en la tabla
+                const tabla = document.getElementById('flights-table');
+                const tbody = tabla.getElementsByTagName('tbody')[0];
+                vuelos.forEach(vuelo => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${vuelo.AIRLINE}</td>
+                        <td>${vuelo.FLIGHT_NUMBER}</td>
+                        <td>${vuelo.ORIGIN_AIRPORT}</td>
+                        <td>${vuelo.DESTINATION_AIRPORT}</td>
+                        <td>${vuelo.CANCELLED ? 'Sí' : 'No'}</td>
+                        <td>${new Date(vuelo.DEPARTURE_DATE).toLocaleString()}</td>
+                        <td>${new Date(vuelo.ARRIVAL_DATE).toLocaleString()}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+    
+                // Ocultar el elemento de carga después de cargar los datos
+                document.getElementById('loading').style.display = 'none';
+            } catch (error) {
+                console.error('Error al obtener los vuelos:', error);
+                // Ocultar el elemento de carga en caso de error
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+    
+        // Llamar a la función para mostrar los vuelos cuando la página se cargue
+        mostrarVuelos();
+    </script>
+    
+</body>
+</html>
