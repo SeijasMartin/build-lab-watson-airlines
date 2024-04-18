@@ -62,32 +62,17 @@ const getDateToString = async (req, res = response) => {
 const getAirports = async (req, res = response) => {
     try {
         // Consultar los aeropuertos desde la base de datos
-        const airports = await Airport.find({}, 'AIRPORT');
+        const airports = await Airport.find({}, 'AIRPORT IATA_CODE');
 
-        // Extraer solo los nombres de los aeropuertos
-        const airportNames = airports.map(airport => airport.AIRPORT).join('\n');
+        // Formatear los datos de los aeropuertos
+        const airportData = airports.map(airport => ({
+            name: airport.AIRPORT,
+            iataCode: airport.IATA_CODE
+        }));
 
-        // Devolver solo los nombres de los aeropuertos como respuesta
+        // Devolver los datos de los aeropuertos como respuesta
         res.json({
-             /* #swagger.responses[200] = {
-                "description": "OK",
-                "content": {
-                  "application/json": {
-                    "schema": {
-                        "type" : "object",
-                        "properties" : {
-                            "result" : {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                }
-                            }
-                        }
-                    }
-                  }
-                }
-            } */
-            result: airportNames
+            result: airportData
         });
     } catch (error) {
         // Manejar errores
@@ -95,6 +80,7 @@ const getAirports = async (req, res = response) => {
         res.status(500).json({ error: 'Error al obtener los aeropuertos' });
     }
 }
+
 
 const getAirlines = async (req, res = expressResponse) => {
     try {

@@ -25,6 +25,7 @@ async function getAirportsFromBackend() {
     }
 }
 
+
 async function getFlightsFromBackendORDE(originAirport, destinationAirport) {
     try {
         // Construir la URL del backend

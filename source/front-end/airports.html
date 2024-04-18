@@ -13,12 +13,11 @@
     </nav>
 
     <div id="loading" style="display: none;">
-          <button class="btn btn-primary" type="button" disabled>
+        <button class="btn btn-primary" type="button" disabled>
             <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
             <span role="status">Loading...</span>
-          </button>
+        </button>
     </div>
-    
 
     <ul id="aeropuertos-lista" class="list-group">
         <!-- Los elementos de la lista se agregarán dinámicamente aquí -->
@@ -31,18 +30,15 @@
                 // Mostrar el elemento de carga
                 document.getElementById('loading').style.display = 'block';
                 
-                const aeropuertosString = await getAirportsFromBackend();
+                const aeropuertosData = await getAirportsFromBackend();
 
-                if (aeropuertosString !== undefined) {
-                    // Dividir la cadena por líneas para obtener los nombres de los aeropuertos
-                    const aeropuertos = aeropuertosString.split('\n');
-
+                if (aeropuertosData !== undefined) {
                     const lista = document.getElementById('aeropuertos-lista');
-                    aeropuertos.forEach(aeropuerto => { 
+                    aeropuertosData.forEach(aeropuerto => { 
                         // Crear un elemento de lista para cada aeropuerto y agregarlo a la lista
                         const li = document.createElement('li');
                         li.classList.add('list-group-item');
-                        li.textContent = aeropuerto.trim(); // Eliminar cualquier espacio en blanco alrededor del nombre del aeropuerto
+                        li.textContent = `${aeropuerto.name} - ${aeropuerto.iataCode}`; // Mostrar el nombre y el código IATA del aeropuerto
                         lista.appendChild(li);
                     });
                     // Ocultar el elemento de carga después de cargar los datos
@@ -54,10 +50,6 @@
                 console.error('Error al obtener los aeropuertos:', error);
             }
         }
-
-
-
-
 
         // Llamar a la función para mostrar los aeropuertos cuando la página se cargue
         mostrarAeropuertos();
